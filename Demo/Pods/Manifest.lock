@@ -1,0 +1,16 @@
+PODS:
+  - GLViewPagerViewController (1.0.1)
+
+DEPENDENCIES:
+  - GLViewPagerViewController (from `../`)
+
+EXTERNAL SOURCES:
+  GLViewPagerViewController:
+    :path: "../"
+
+SPEC CHECKSUMS:
+  GLViewPagerViewController: c4624fde1f018308e4f264119b9b3d99d5fda6b7
+
+PODFILE CHECKSUM: 4279485eebe2527c7a86898eb8e5459739bc2593
+
+COCOAPODS: 1.2.1
