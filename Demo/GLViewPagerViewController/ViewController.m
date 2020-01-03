@@ -5,6 +5,8 @@
 //  Created by Yanci on 17/4/18.
 //  Copyright © 2017年 Yanci. All rights reserved.
 //
+#define TabSpan  20
+#define TabHeight  80
 
 #import "ViewController.h"
 
@@ -53,6 +55,7 @@
 @property (nonatomic,strong)NSArray *viewControllers;
 @property (nonatomic,strong)NSArray *tagTitles;
 @property (nonatomic,assign)BOOL fullfillTabs;  /** Fullfilltabs when tabs width less than view width */
+@property (strong, nonatomic) NSArray *tabData;
 @end
 
 @implementation ViewController
@@ -60,56 +63,61 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-     self.navigationItem.title = @"Paged Tabs";
-      // Do any additional setup after loading the view.
-      /// 设置数据源
-      self.dataSource = self;
-      /// 设置数据委托
-      self.delegate = self;
-      /// 是否固定标签宽度
-      self.fixTabWidth = false;
-      /// Tab之间边距
-      self.padding = 10;
-      /// 是否填充tabs满屏幕
-      self.fullfillTabs = YES;
-      /// 固定指示器宽度
-      self.fixIndicatorWidth = false;
-      /// 指示器宽度
-      self.indicatorWidth = 20;
-      /// 指示器颜色
-      self.indicatorColor = [UIColor colorWithRed:255.0/255.0 green:205.0 / 255.0 blue:0.0 alpha:1.0];
-      /// 头边距
-      self.leadingPadding = 10;
-      /// 尾边距
-      self.trailingPadding = 10;
-      /// 默认显示页
-      self.defaultDisplayPageIndex = 0;
-      /// Tab动画
-      self.tabAnimationType = GLTabAnimationType_whileScrolling;
-      /// 是否支持阿拉伯，如果是阿拉伯则反转
-      self.supportArabic = NO;
+   
+        self.navigationItem.title = @"Paged Tabs";
+        // Do any additional setup after loading the view.
+        /// 设置数据源
+        self.dataSource = self;
+        /// 设置数据委托
+        self.delegate = self;
+        /// 是否固定标签宽度
+        self.fixTabWidth = false;
+        /// Tab之间边距
+        self.padding = 10;
+        /// 是否填充tabs满屏幕
+        self.fullfillTabs = YES;
+        /// 固定指示器宽度
+        self.fixIndicatorWidth = false;
+        /// 指示器宽度
+        self.indicatorWidth = 20;
+        /// 指示器颜色
+        self.indicatorColor = [UIColor colorWithRed:255.0/255.0 green:205.0 / 255.0 blue:0.0 alpha:1.0];
+        /// 头边距
+        self.leadingPadding = 10;
+        /// 尾边距
+        self.trailingPadding = 10;
+        /// 默认显示页
+        self.defaultDisplayPageIndex = 0;
+        /// Tab动画
+        self.tabAnimationType = GLTabAnimationType_whileScrolling;
+        /// 是否支持阿拉伯，如果是阿拉伯则反转
+        self.supportArabic = NO;
+     
     
     
     /** 设置内容视图 */
     self.viewControllers = @[
         [[GLPresentViewController alloc]initWithTitle:@" One "],
-        [[GLPresentViewController alloc]initWithTitle:@" Two"],
-    
+//        [[GLPresentViewController alloc]initWithTitle:@" Two"],
+//         [[GLPresentViewController alloc]initWithTitle:@" Three"],
       
     ];
     /** 设置标签标题 */
     self.tagTitles = @[
 //        @"Page One ViewController ViewController ViewController ViewController Tab",
-        @"Page Two ViewController",
-        @"Page Three",
+//        @"Page Two ViewController ViewController ViewController ViewController",
+        @"キャンペーン キャンペーン キャンペーン キャンペーン キャンペーン キャンペー",
 
     ];
-    int sizeA = [_tagTitles count];
-    NSString *str = _tagTitles[0];
-   
-//    self.tagTitles = @[@"キャンペーン キャンペーン キャンペーン キャンペーン キャンペーン キャンペー"];
-    NSUInteger characterCount = [str length];
-    NSLog(@"character count %@",@(characterCount));
+    [self setTabData:_tagTitles
+     ];
+    
+//    int sizeA = [_tagTitles count];
+//    NSString *str = _tagTitles[0];
+//
+////    self.tagTitles = @[@"キャンペーン キャンペーン キャンペーン キャンペーン キャンペーン キャンペー"];
+//    NSUInteger characterCount = [str length];
+//    NSLog(@"character count %@",@(characterCount));
     
 
 }
@@ -210,12 +218,46 @@ contentViewControllerForTabAtIndex:(NSUInteger)index {
         prototypeLabel = [[UILabel alloc]init];
     }
     prototypeLabel.text = [self.tagTitles objectAtIndex:index];
+    NSLog(@"TTTT%@", prototypeLabel.text);
     prototypeLabel.textAlignment = NSTextAlignmentCenter;
     prototypeLabel.font = [UIFont systemFontOfSize:16.0];
 #if 0
     prototypeLabel.transform = CGAffineTransformScale(CGAffineTransformIdentity, 0.9, 0.9);
 #endif
-    return prototypeLabel.intrinsicContentSize.width + (self.fullfillTabs == YES ?  [self tabsFulFillToScreenWidthInset] : 0);
+//    return prototypeLabel.intrinsicContentSize.width + (self.fullfillTabs == YES ?  [self tabsFulFillToScreenWidthInset] : 0);
+  
+    //KHMZ
+        NSUInteger count = self.tabData.count;
+        NSUInteger tabWidth = 0;
+        NSUInteger tabItemWidth = 0;
+        BOOL isFortyCharacter = NO;
+       NSInteger contentSize = TabSpan;
+       NSUInteger xp = TabSpan;
+       NSInteger characterCount = [prototypeLabel.text length];
+       NSLog(@"character count %@",@(characterCount));
+              if(characterCount == 40){
+                  isFortyCharacter = YES;
+              }
+              tabWidth += characterCount * 12;
+       
+       if(tabWidth <= self.view.frame.size.width/2){
+              tabItemWidth = (self.view.frame.size.width / self.tabData.count);
+          }else{
+              if(count < 2){
+                  tabItemWidth = self.view.frame.size.width;
+              }else if(count == 2){
+                  tabItemWidth = self.view.frame.size.width / 2;
+              }else{
+                  if(isFortyCharacter){
+                      tabItemWidth = 150 * count;
+                  }else{
+                     tabItemWidth = 120 * count;
+                  }
+                  
+              }
+          }
+    return tabItemWidth;
+ //    return prototypeLabel.intrinsicContentSize.width;
 }
 
 #pragma mark - funcs
@@ -261,13 +303,5 @@ contentViewControllerForTabAtIndex:(NSUInteger)index {
 - (BOOL)isTabsWidthGreaterThanScreenWidth {
     return [self screenleftWidthForTabs] < 0 ? true : false;
 }
-
-
-
-
-
-
-
-
 
 @end
