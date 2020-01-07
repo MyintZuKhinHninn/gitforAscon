@@ -5,6 +5,8 @@
 //  Created by Yanci on 17/4/18.
 //  Copyright © 2017年 Yanci. All rights reserved.
 //
+#define TabSpan  20
+#define TabHeight  80
 
 #import "ViewController.h"
 
@@ -53,6 +55,7 @@
 @property (nonatomic,strong)NSArray *viewControllers;
 @property (nonatomic,strong)NSArray *tagTitles;
 @property (nonatomic,assign)BOOL fullfillTabs;  /** Fullfilltabs when tabs width less than view width */
+@property (strong, nonatomic) NSArray *tabData;
 @end
 
 @implementation ViewController
@@ -94,14 +97,14 @@
     self.viewControllers = @[
         [[GLPresentViewController alloc]initWithTitle:@" One "],
         [[GLPresentViewController alloc]initWithTitle:@" Two"],
-    
+        [[GLPresentViewController alloc]initWithTitle:@" Three"],
       
     ];
     /** 设置标签标题 */
     self.tagTitles = @[
-//        @"Page One ViewController ViewController ViewController ViewController Tab",
+        @"Page One ViewController ViewController ViewController ViewController Tab",
         @"Page Two ViewController",
-        @"Page Three",
+        @"キャンペーン キャンペーン キャンペーン キャンペーン キャンペーン キャンペー",
 
     ];
     int sizeA = [_tagTitles count];
@@ -241,9 +244,9 @@ contentViewControllerForTabAtIndex:(NSUInteger)index {
                   tabItemWidth = self.view.frame.size.width / 2;
               }else{
                   if(isFortyCharacter){
-                      tabItemWidth = 150 * count;
+                      tabItemWidth = 150;
                   }else{
-                     tabItemWidth = 120 * count;
+                     tabItemWidth = 120;
                   }
                   
               }

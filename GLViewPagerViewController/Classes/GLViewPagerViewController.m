@@ -22,6 +22,10 @@
 
 #import "GLViewPagerViewController.h"
 
+#define TabWidth  50
+#define TabHeight  80
+#define TabSpan  20
+
 /**
  * 常量定义
  */
@@ -36,7 +40,6 @@
 #define kPageViewCtrlBackgroundColor    [UIColor whiteColor]
 
 
-
 static const CGFloat kTabHeight = 44.0;
 static const CGFloat kTabWidth = 128.0;
 static const CGFloat kIndicatorHeight = 2.0;
@@ -45,10 +48,11 @@ static const CGFloat kPadding = 0.0;
 static const CGFloat kLeadingPadding = 0.0;
 static const CGFloat kTrailingPadding = 0.0;
 static const BOOL kFixTabWidth = YES;
-static const BOOL kFixIndicatorWidth = NO;
+static const BOOL kFixIndicatorWidth = YES;
 static const NSUInteger kDefaultDisplayPageIndex = 0;
 static const CGFloat kAnimationTabDuration = 0.3;
 static const GLTabAnimationType kTabAnimationType = GLTabAnimationType_none;
+
 
 @interface GLViewPagerViewController ()<UIPageViewControllerDelegate,UIPageViewControllerDataSource,UIScrollViewDelegate>
 @property (nonatomic,strong)UIPageViewController *pageViewController;
@@ -57,6 +61,8 @@ static const GLTabAnimationType kTabAnimationType = GLTabAnimationType_none;
 @property (nonatomic,strong)UIScrollView *tabContentView;
 @property (nonatomic,strong)NSMutableArray <UIView *>*tabViews;
 @property (nonatomic,strong)UIView *indicatorView;
+@property (strong, nonatomic) NSArray *tabData;
+@property (nonatomic) CGRect initFrame;
 @end
 
 @implementation GLViewPagerViewController {
@@ -82,6 +88,8 @@ static const GLTabAnimationType kTabAnimationType = GLTabAnimationType_none;
     BOOL _enableTabAnimationWhileScrolling; /** 是否允许标签滑动显示 */
  
 }
+
+//KHMZ
 
 
 #pragma mark - life cycle
@@ -307,6 +315,7 @@ static const GLTabAnimationType kTabAnimationType = GLTabAnimationType_none;
     self.defaultDisplayPageIndex = kDefaultDisplayPageIndex;
     self.tabAnimationType = kTabAnimationType;
     self.animationTabDuration = kAnimationTabDuration;
+    [self _setNeedsReload];
      
 }
 
@@ -410,8 +419,10 @@ static const GLTabAnimationType kTabAnimationType = GLTabAnimationType_none;
             if (i == numberOfTabs - 1) {
                 tabContentWidth += self.trailingPadding;
             }
-        }
+            }
+
         self.tabContentView.contentSize = CGSizeMake(tabContentWidth, kTabHeight);
+        
     }
     
     [self.contentViews removeAllObjects];
@@ -454,6 +465,11 @@ static const GLTabAnimationType kTabAnimationType = GLTabAnimationType_none;
         }
     }
     _needsReload = NO;
+}
+
+-(void) setTabData:(NSArray *)tabData{
+    _tabData = tabData;
+    [self reloadData];
 }
 
 - (UIView *)tabViewAtIndex:(NSUInteger)index {
@@ -762,6 +778,7 @@ static const GLTabAnimationType kTabAnimationType = GLTabAnimationType_none;
         _tabContentView.showsVerticalScrollIndicator = NO;
         _tabContentView.bounces = NO;
         _tabContentView.contentSize = CGSizeZero;
+        _tabContentView.backgroundColor = UIColor.whiteColor;
     }
     return _tabContentView;
 }
@@ -807,6 +824,7 @@ static const GLTabAnimationType kTabAnimationType = GLTabAnimationType_none;
     if (!_tabViews) {
         _tabViews = [NSMutableArray array];
     }
+
     return _tabViews;
 }
 
