@@ -107,6 +107,8 @@
         @"キャンペーン キャンペーン キャンペーン キャンペーン キャンペーン キャンペー",
 
     ];
+    [self setTabData:_tagTitles
+        ];
     int sizeA = [_tagTitles count];
     NSString *str = _tagTitles[0];
    
