@@ -210,12 +210,46 @@ contentViewControllerForTabAtIndex:(NSUInteger)index {
         prototypeLabel = [[UILabel alloc]init];
     }
     prototypeLabel.text = [self.tagTitles objectAtIndex:index];
+    NSLog(@"TTTT%@", prototypeLabel.text);
     prototypeLabel.textAlignment = NSTextAlignmentCenter;
     prototypeLabel.font = [UIFont systemFontOfSize:16.0];
 #if 0
     prototypeLabel.transform = CGAffineTransformScale(CGAffineTransformIdentity, 0.9, 0.9);
 #endif
-    return prototypeLabel.intrinsicContentSize.width + (self.fullfillTabs == YES ?  [self tabsFulFillToScreenWidthInset] : 0);
+//    return prototypeLabel.intrinsicContentSize.width + (self.fullfillTabs == YES ?  [self tabsFulFillToScreenWidthInset] : 0);
+  
+    //KHMZ
+        NSUInteger count = self.tabData.count;
+        NSUInteger tabWidth = 0;
+        NSUInteger tabItemWidth = 0;
+        BOOL isFortyCharacter = NO;
+       NSInteger contentSize = TabSpan;
+       NSUInteger xp = TabSpan;
+       NSInteger characterCount = [prototypeLabel.text length];
+       NSLog(@"character count %@",@(characterCount));
+              if(characterCount == 40){
+                  isFortyCharacter = YES;
+              }
+              tabWidth += characterCount * 12;
+       
+       if(tabWidth <= self.view.frame.size.width/2){
+              tabItemWidth = (self.view.frame.size.width / self.tabData.count);
+          }else{
+              if(count < 2){
+                  tabItemWidth = self.view.frame.size.width;
+              }else if(count == 2){
+                  tabItemWidth = self.view.frame.size.width / 2;
+              }else{
+                  if(isFortyCharacter){
+                      tabItemWidth = 150 * count;
+                  }else{
+                     tabItemWidth = 120 * count;
+                  }
+                  
+              }
+          }
+    return tabItemWidth;
+ //    return prototypeLabel.intrinsicContentSize.width;
 }
 
 #pragma mark - funcs
